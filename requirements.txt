@@ -1,3 +1,6 @@
-python-telegram-bot==20.7
+pypython-telegram-bot==20.7
 yt-dlp
 requests
+pip==24.0
+setuptools>=65.5.1
+
