@@ -51,7 +51,6 @@ logger = logging.getLogger(__name__)
 # ===========================
 # CONFIG
 # ===========================
-import os
 TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN")
 TELEGRAM_FILE_SIZE_LIMIT = 50 * 1024 * 1024  # 50 MB
 BOT_USERNAME = "@yuklasin_bot"
