@@ -469,18 +469,14 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
 # ===========================
 
 def main():
-    if not TELEGRAM_BOT_TOKEN or "YOUR" in TELEGRAM_BOT_TOKEN:
-        logger.error("❌ TELEGRAM_BOT_TOKEN to'g'ri kiritilmagan!")
-        print("❌ TELEGRAM_BOT_TOKEN to'g'ri kiritilmagan!")
+    token = TELEGRAM_BOT_TOKEN
+    if not token:
+        print("❌ BOT_TOKEN topilmadi (Render environment variables’da yo‘q)")
         return
 
     application = (
         Application.builder()
-        .token(TELEGRAM_BOT_TOKEN)
-        .concurrent_updates(True)
-        .connection_pool_size(8)
-        .read_timeout(30)
-        .write_timeout(30)
+        .token(token)
         .build()
     )
 
@@ -491,9 +487,9 @@ def main():
     application.add_handler(CallbackQueryHandler(button_callback))
     application.add_error_handler(error_handler)
 
-    logger.info("🚀 Insta DL Bot (Premium) ishga tushdi...")
-    print("🚀 Insta DL Bot (Premium) ishga tushdi...")
+    print("🚀 Insta DL Bot Premium Render’da ishga tushdi...")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
+
 
 if __name__ == "__main__":
     main()
