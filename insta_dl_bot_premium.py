@@ -467,30 +467,32 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
 # MAIN
 # ===========================
 
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, CallbackQueryHandler, filters
-import os
-
 def main():
-    token = os.getenv("TELEGRAM_BOT_TOKEN")
-    if not token:
-        print("❌ Bot token topilmadi! Environment variable TELEGRAM_BOT_TOKEN kerak.")
+    if not TELEGRAM_BOT_TOKEN or "YOUR" in TELEGRAM_BOT_TOKEN:
+        logger.error("❌ TELEGRAM_BOT_TOKEN to'g'ri kiritilmagan!")
+        print("❌ TELEGRAM_BOT_TOKEN to'g'ri kiritilmagan!")
         return
 
-    app = (
-        ApplicationBuilder()
-        .token(token)
+    application = (
+        Application.builder()
+        .token(TELEGRAM_BOT_TOKEN)
+        .concurrent_updates(True)
+        .connection_pool_size(8)
+        .read_timeout(30)
+        .write_timeout(30)
         .build()
     )
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("stats", stats_cmd))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url))
-    app.add_handler(CallbackQueryHandler(buttons))
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("stats", stats_command))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_url))
+    application.add_handler(CallbackQueryHandler(button_callback))
+    application.add_error_handler(error_handler)
 
-    print("🚀 Bot ishga tushdi...")
-    app.run_polling()
-    
+    logger.info("🚀 Insta DL Bot (Premium) ishga tushdi...")
+    print("🚀 Insta DL Bot (Premium) ishga tushdi...")
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
     main()
-
